@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Cake for Diya 🎂</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg,
+                    #ffd1dc 0%,
+                    #e6e6fa 25%,
+                    #ffefd5 50%,
+                    #e6e6fa 75%,
+                    #ffd1dc 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            color: #4a4a4a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Sparkle Effect */
+        .magic-sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .magic-sparkles::before,
+        .magic-sparkles::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, white 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: sparkleLayer 8s linear infinite;
+            opacity: 0.5;
+        }
+
+        .magic-sparkles::after {
+            animation-delay: -4s;
+            transform: rotate(45deg);
+        }
+
+        @keyframes sparkleLayer {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
+        /* Floating Hearts */
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255, 105, 180, 0.6);
+            animation: floatHeart var(--float-duration, 6s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translate(0, 100vh) rotate(0deg); }
+            100% { transform: translate(var(--translate-x, 0), -100vh) rotate(360deg); }
+        }
+
+        /* Container */
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #ff69b4;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Cake Container */
+        .cake-container {
+            margin: 2rem 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .cake-image-wrapper {
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .cake-container:hover .cake-image-wrapper {
+            transform: scale(1.05);
+        }
+
+        .cake-image {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.3));
+            transition: all 0.5s ease;
+        }
+
+        /* Cutting Animation */
+        .cake-image-wrapper.cut {
+            animation: cutCake 1.5s ease forwards;
+        }
+
+        @keyframes cutCake {
+            0% {
+                transform: scale(1);
+            }
+            30% {
+                transform: scale(0.95);
+            }
+            60% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(0.85);
+                opacity: 0.7;
+            }
+        }
+
+        .cake-image.cut {
+            filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.3)) brightness(0.8);
+        }
+
+        /* Cutting Line Effect */
+        .cut-line {
+            position: absolute;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, #fff, transparent);
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            opacity: 0;
+            z-index: 20;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            pointer-events: none;
+        }
+
+        .cut-line.show {
+            animation: cutLine 1.5s ease forwards;
+        }
+
+        @keyframes cutLine {
+            0% {
+                opacity: 0;
+                height: 0;
+            }
+            50% {
+                opacity: 1;
+                height: 100%;
+            }
+            100% {
+                opacity: 0;
+                height: 100%;
+            }
+        }
+
+        /* Cake Name and Age Overlay */
+        .cake-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .cake-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cake-age {
+            font-size: 1.5rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* Click Instruction */
+        .click-instruction {
+            margin-top: 2rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #ff69b4;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards, pulse 2s infinite ease-in-out 3s;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Music Control */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        .music-control svg {
+            width: 24px;
+            height: 24px;
+            fill: #ff69b4;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .cake-base {
+                width: 250px;
+                height: 180px;
+            }
+
+            .cake-top {
+                width: 200px;
+                height: 120px;
+                top: -120px;
+            }
+
+            .cake-name {
+                font-size: 2rem;
+            }
+
+            .cake-age {
+                font-size: 1.2rem;
+            }
+
+            .candles-container {
+                gap: 15px;
+                top: -150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="magic-sparkles"></div>
+    <div class="floating-hearts">
+        <div class="heart" style="--float-duration: 6s; --delay: 0s; --translate-x: 20px;">💝</div>
+        <div class="heart" style="--float-duration: 8s; --delay: 1s; --translate-x: -30px;">💖</div>
+        <div class="heart" style="--float-duration: 7s; --delay: 2s; --translate-x: 40px;">💗</div>
+        <div class="heart" style="--float-duration: 9s; --delay: 3s; --translate-x: -20px;">💓</div>
+        <div class="heart" style="--float-duration: 5s; --delay: 4s; --translate-x: 30px;">💕</div>
+    </div>
+
+    <!-- Background Music - Auto Play -->
+    <audio id="birthdayMusic" loop autoplay>
+        <!-- Add your birthday song file (MP3 format) in the HappyBirthdayGF folder and update the path below -->
+        <source src="./birthday-song.mp3" type="audio/mpeg">
+        <!-- Alternative: Use an online URL -->
+        <!-- <source src="YOUR_BIRTHDAY_SONG_URL_HERE" type="audio/mpeg"> -->
+    </audio>
+
+    <div class="container">
+        <h1 class="title">Happy 24th Birthday Diya! 🎂🎉</h1>
+
+        <div class="cake-container" id="cakeContainer">
+            <div class="cake-image-wrapper" id="cakeWrapper">
+                <img src="./cake.gif" alt="Birthday Cake" class="cake-image" id="cakeImage">
+                <div class="cut-line" id="cutLine"></div>
+            </div>
+        </div>
+
+        <p class="click-instruction">Click on the cake to cut it! 🎂✨</p>
+    </div>
+
+    <script>
+        // Auto-play music and animate cake entrance
+        window.addEventListener('load', () => {
+            const birthdayMusic = document.getElementById('birthdayMusic');
+            birthdayMusic.play().catch(e => {
+                console.log('Autoplay blocked, will play on user interaction');
+            });
+
+            // Animate cake entrance
+            const cakeWrapper = document.getElementById('cakeWrapper');
+            gsap.from(cakeWrapper, {
+                scale: 0,
+                y: 100,
+                duration: 1.5,
+                ease: "elastic.out(1, 0.5)"
+            });
+        });
+
+        // Cake cutting functionality
+        let isCut = false;
+        const cakeContainer = document.getElementById('cakeContainer');
+        const cakeWrapper = document.getElementById('cakeWrapper');
+        const cakeImage = document.getElementById('cakeImage');
+        const cutLine = document.getElementById('cutLine');
+        const clickInstruction = document.querySelector('.click-instruction');
+
+        cakeContainer.addEventListener('click', () => {
+            if (isCut) return;
+            isCut = true;
+
+            // Hide instruction
+            gsap.to(clickInstruction, {
+                opacity: 0,
+                duration: 0.3
+            });
+
+            // Show cut line
+            cutLine.classList.add('show');
+
+            // Animate cutting
+            setTimeout(() => {
+                cakeWrapper.classList.add('cut');
+                cakeImage.classList.add('cut');
+
+                // Create confetti effect
+                createConfetti();
+
+                // Navigate after animation
+                setTimeout(() => {
+                    gsap.to('body', {
+                        opacity: 0,
+                        duration: 1,
+                        onComplete: () => {
+                            window.location.href = 'cause.html';
+                        }
+                    });
+                }, 1500);
+            }, 200);
+        });
+
+        // Confetti effect on cut
+        function createConfetti() {
+            const colors = ['#ff69b4', '#ff1493', '#da70d6', '#ffd700', '#ffed4e'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = '50%';
+                confetti.style.top = '50%';
+                confetti.style.borderRadius = '50%';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '100';
+                document.body.appendChild(confetti);
+
+                gsap.to(confetti, {
+                    x: (Math.random() - 0.5) * 500,
+                    y: (Math.random() - 0.5) * 500,
+                    rotation: Math.random() * 360,
+                    opacity: 0,
+                    duration: 1.5,
+                    ease: "power2.out",
+                    onComplete: () => confetti.remove()
+                });
+            }
+        }
+
+        // Create floating elements
+        function createFloatingElement() {
+            const elements = ['🌸', '✨', '💖', '🦋', '⭐', '💫', '🎉', '🎂'];
+            const element = document.createElement('div');
+            element.className = 'floating';
+            element.textContent = elements[Math.floor(Math.random() * elements.length)];
+            element.style.position = 'fixed';
+            element.style.left = Math.random() * window.innerWidth + 'px';
+            element.style.top = Math.random() * window.innerHeight + 'px';
+            element.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            element.style.pointerEvents = 'none';
+            element.style.zIndex = '10';
+            document.body.appendChild(element);
+
+            gsap.to(element, {
+                y: -500,
+                x: Math.random() * 200 - 100,
+                rotation: Math.random() * 360,
+                duration: Math.random() * 3 + 3,
+                opacity: 0,
+                ease: "power2.out",
+                onComplete: () => element.remove()
+            });
+        }
+
+        // Create floating elements periodically
+        setInterval(createFloatingElement, 1500);
+    </script>
+</body>
+</html>
+

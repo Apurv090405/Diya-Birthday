@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Letter for Diya 💌</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg,
+                    #ffd1dc 0%,
+                    #e6e6fa 25%,
+                    #ffefd5 50%,
+                    #e6e6fa 75%,
+                    #ffd1dc 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            color: #4a4a4a;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Sparkle Effect */
+        .magic-sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .magic-sparkles::before,
+        .magic-sparkles::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, white 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: sparkleLayer 8s linear infinite;
+            opacity: 0.5;
+        }
+
+        .magic-sparkles::after {
+            animation-delay: -4s;
+            transform: rotate(45deg);
+        }
+
+        @keyframes sparkleLayer {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50px); }
+        }
+
+        /* Floating Hearts */
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255, 105, 180, 0.6);
+            animation: floatHeart var(--float-duration, 6s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translate(0, 100vh) rotate(0deg); }
+            100% { transform: translate(var(--translate-x, 0), -100vh) rotate(360deg); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Birthday Message */
+        .birthday-message {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+        }
+
+        .birthday-message h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #ff69b4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .birthday-message p {
+            font-size: 1.5rem;
+            color: #8a2be2;
+            font-weight: 500;
+        }
+
+        /* Letter Container */
+        .letter-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #ff69b4, #da70d6, #ff69b4);
+            border-radius: 25px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(255, 105, 180, 0.3);
+        }
+
+        .letter-header h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ff69b4;
+            margin-bottom: 0.5rem;
+        }
+
+        .letter-date {
+            font-size: 1rem;
+            color: #999;
+            font-style: italic;
+        }
+
+        .letter-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            text-align: justify;
+            margin-bottom: 2rem;
+        }
+
+        .letter-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(255, 105, 180, 0.3);
+        }
+
+        .letter-signature p {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #ff69b4;
+            margin-bottom: 0.5rem;
+        }
+
+        .letter-signature .signature-name {
+            font-size: 1.2rem;
+            color: #8a2be2;
+            font-weight: 500;
+        }
+
+        /* Decorative Elements */
+        .decorative-heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .decorative-heart.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .decorative-heart.top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .decorative-heart.bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .decorative-heart.bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .birthday-message h1 {
+                font-size: 3rem;
+            }
+
+            .letter-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .letter-content {
+                font-size: 1.1rem;
+            }
+
+            .letter-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="magic-sparkles"></div>
+    <div class="floating-hearts">
+        <div class="heart" style="--float-duration: 6s; --delay: 0s; --translate-x: 20px;">💝</div>
+        <div class="heart" style="--float-duration: 8s; --delay: 1s; --translate-x: -30px;">💖</div>
+        <div class="heart" style="--float-duration: 7s; --delay: 2s; --translate-x: 40px;">💗</div>
+        <div class="heart" style="--float-duration: 9s; --delay: 3s; --translate-x: -20px;">💓</div>
+        <div class="heart" style="--float-duration: 5s; --delay: 4s; --translate-x: 30px;">💕</div>
+    </div>
+
+    <!-- Background Music - Auto Play -->
+    <audio id="birthdayMusic" loop autoplay>
+        <!-- Add your birthday song file (MP3 format) in the HappyBirthdayGF folder and update the path below -->
+        <source src="./birthday-song.mp3" type="audio/mpeg">
+        <!-- Alternative: Use an online URL -->
+        <!-- <source src="YOUR_BIRTHDAY_SONG_URL_HERE" type="audio/mpeg"> -->
+    </audio>
+
+    <div class="container">
+        <div class="birthday-message" id="birthdayMessage">
+            <h1>Happy Birthday Diya! 🎂🎉</h1>
+            <p>Here's a special letter just for you 💌</p>
+        </div>
+
+        <div class="letter-container" id="letterContainer">
+            <div class="decorative-heart top-left">💖</div>
+            <div class="decorative-heart top-right">💗</div>
+            <div class="decorative-heart bottom-left">💕</div>
+            <div class="decorative-heart bottom-right">💝</div>
+
+            <div class="letter-header">
+                <h2>My Dearest Diya,</h2>
+                <div class="letter-date">On Your Special Day</div>
+            </div>
+
+            <div class="letter-content">
+                <p>
+                    Happiest Birthday to you, Diya! 🥳💖 <br> <br>
+For me, you’re not just a sister figure — you’re my one and only support system. I’ve made this very special for you, hope you like it. 🫶 <br><br>
+I know what you’re going through, but truly, I pray for you every single day. May this birthday bring happiness, peace, success, and every desire of your heart 🌸 <br><br>
+Keep smiling, Diya — because your smile itself is pure magic ✨ Don’t let sadness dim that light. Krishna will bless you with everything you deserve — just stay calm, positive, and full of hope 🙏💛 <br><br>
+You’re really special to us all. Be happy always, and remember… your smile is more precious than anything else 🩷
+Once again, Happiest Birthday Diya! 🥳🫶
+                </p>
+                <p>
+                    Here's to another year of adventures, growth, laughter, and all the beautiful moments that lie ahead. May all your dreams come true, and may happiness follow you wherever you go.
+                </p>
+            </div>
+
+            <div class="letter-signature">
+                <p>With all my wishes,</p>
+                <div class="signature-name">💖 your worst brother</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-play music
+        window.addEventListener('load', () => {
+            const birthdayMusic = document.getElementById('birthdayMusic');
+            birthdayMusic.play().catch(e => {
+                console.log('Autoplay blocked, will play on user interaction');
+            });
+
+            // Animate birthday message
+            const birthdayMessage = document.getElementById('birthdayMessage');
+            gsap.to(birthdayMessage, {
+                opacity: 1,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            // Animate letter container
+            setTimeout(() => {
+                const letterContainer = document.getElementById('letterContainer');
+                gsap.to(letterContainer, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    ease: "back.out(1.7)"
+                });
+            }, 500);
+
+            // Create floating elements periodically
+            function createFloatingElement() {
+                const elements = ['🌸', '✨', '💖', '🦋', '⭐', '💫', '🎉'];
+                const element = document.createElement('div');
+                element.className = 'floating';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.position = 'fixed';
+                element.style.left = Math.random() * window.innerWidth + 'px';
+                element.style.top = Math.random() * window.innerHeight + 'px';
+                element.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                element.style.pointerEvents = 'none';
+                element.style.zIndex = '10';
+                document.body.appendChild(element);
+
+                gsap.to(element, {
+                    y: -500,
+                    x: Math.random() * 200 - 100,
+                    rotation: Math.random() * 360,
+                    duration: Math.random() * 3 + 3,
+                    opacity: 0,
+                    ease: "power2.out",
+                    onComplete: () => element.remove()
+                });
+            }
+
+            // Create floating elements every 2 seconds
+            setInterval(createFloatingElement, 2000);
+        });
+    </script>
+</body>
+</html>
+
